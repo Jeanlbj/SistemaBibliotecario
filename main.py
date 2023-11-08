@@ -7,35 +7,48 @@ def mostrar_menu():
     print("### Menu de Opções ###")
     print("1. Listar Livros")
     print("2. Listar Empréstimos")
-    print("3. Sair")
+    print("3. Sobre")
+    print("4. Sair")
 
 
 if __name__ == '__main__':
-    usuario = Usuario()
-    usuario.set_login(input("Login: "))
-    usuario.set_senha(input("Senha: "))
 
-    if usuario.validar_acesso():
-        print(f"Acesso permitido! Bem vindo(a) {usuario.get_nome()}.")
+    tentativas = 3
 
-        while True:
-            mostrar_menu()
-            opcao = input("Escolha uma opção: ")
+    while tentativas > 0:
+        usuario = Usuario()
+        usuario.set_login(input("Login: "))
+        usuario.set_senha(input("Senha: "))
+        tentativas -= 1
 
-            if opcao == "1":
-                print("Você escolheu a opção de listar livros.")
+        if tentativas != 3 and tentativas > 0 and usuario.validar_acesso() == False:
+            print(f"\nVocê tem mais {tentativas} tentativa(s).")
 
-                Livro.listar_livros()
+        if usuario.validar_acesso():
+            print(f"Acesso permitido! Bem vindo(a) {usuario.get_nome()}.")
 
-            elif opcao == "2":
-                print("Você escolheu a opção de listar empréstimos.")
-                Emprestimo.listar_emprestimos()
+            while True:
+                mostrar_menu()
+                opcao = input("Escolha uma opção: ")
 
-            elif opcao == "3":
-                print("Saindo do sistema.")
-                break
-            else:
-                print("Opção inválida. Por favor, escolha uma opção válida.")
+                if opcao == "1":
+                    print("Você escolheu a opção de listar livros.")
 
-    else:
-        print("Acesso Negado! Login ou senha inválidos.")
+                    Livro.listar_livros()
+
+                elif opcao == "2":
+                    print("Você escolheu a opção de listar empréstimos.")
+                    Emprestimo.listar_emprestimos()
+
+                elif opcao == "3":
+                    print("Você escolheu a opção sobre")
+                    pass
+
+                elif opcao == "4":
+                    print("Saindo do sistema.")
+                    break
+                else:
+                    print("Opção inválida. Por favor, escolha uma opção válida.")
+
+        else:
+            print("Acesso Negado! Login ou senha inválidos.")

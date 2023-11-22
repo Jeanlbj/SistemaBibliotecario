@@ -131,7 +131,14 @@ class TelaMenu:
 
     def mostrar_sobre(self):
         self.texto_resultado.delete(1.0, tk.END)
-        sobre_info = "Sistema Bibliotecário\nVersão 1.0\nDesenvolvido por [Seu Nome]\n"
+        sobre_info = ("Fundada em 2023 por visionários alunos dos cursos de \n"
+                      "Engenharia de Software e Sistemas de Informação do UniAcademia,\n"
+                      "a Librateca é uma inovadora empresa de desenvolvimento de software.\n"
+                      "Nossa missão é otimizar o gerenciamento de bibliotecas,\n"
+                      "proporcionando uma experiência intuitiva e eficaz.E como visão, \n"
+                      "buscamos ser líderes na transformação digital das bibliotecas, \n"
+                      "oferecendo soluções inovadoras que atendam às necessidades \n"
+                      "dinâmicas do mundo contemporâneo")
         self.texto_resultado.insert(tk.END, sobre_info)
 
     def sair(self):

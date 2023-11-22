@@ -10,6 +10,7 @@ class Emprestimo:
         emprestimos = []
         with open('txt/emprestimos.txt', 'r') as arquivo_emprestimos:
             for linha in arquivo_emprestimos:
+                # Aqui, a linha está sendo dividida em mais valores do que o esperado
                 codigo, cliente, livro, data = linha.strip().split(',')
                 emprestimo = cls(codigo, cliente, livro, data)  # Cria uma instância da classe Emprestimo
                 emprestimos.append(emprestimo)
@@ -32,3 +33,10 @@ class Emprestimo:
         with open('txt/emprestimos.txt', 'a') as arquivo_emprestimos:
             linha = f"{emprestimo.codigo},{emprestimo.cliente},{emprestimo.livro},{emprestimo.data}\n"
             arquivo_emprestimos.write(linha)
+
+    @classmethod
+    def salvar_emprestimos_no_arquivo(cls, emprestimos):
+        with open('txt/emprestimos.txt', 'w') as arquivo_emprestimos:
+            for emprestimo in emprestimos:
+                linha = f"{emprestimo.codigo},{emprestimo.cliente},{emprestimo.livro},{emprestimo.data}\n"
+                arquivo_emprestimos.write(linha)

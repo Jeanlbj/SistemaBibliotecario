@@ -2,7 +2,9 @@ import tkinter as tk
 from tkinter import messagebox
 from PIL import Image, ImageTk
 from Model.TelaMenu import TelaMenu
+from Model.TelaMenuBibliotecário import TelaMenuBibliotecario
 from Model.Usuario import Usuario
+
 
 class TelaLogin:
     def __init__(self, root):
@@ -36,26 +38,32 @@ class TelaLogin:
         label_login = tk.Label(right_frame, text="Login:", font=("Helvetica", 12), bg="#ECF0F1")
         label_login.grid(row=0, column=0, pady=(0, 10), sticky="w")
 
-        self.entry_login = tk.Entry(right_frame, font=("Helvetica", 12))
-        self.entry_login.grid(row=1, column=0, pady=(0, 10), padx=10, ipady=8)
+        entry_login = tk.Entry(right_frame, font=("Helvetica", 12))
+        entry_login.grid(row=1, column=0, pady=(0, 10), padx=10, ipady=8)
 
         label_senha = tk.Label(right_frame, text="Senha:", font=("Helvetica", 12), bg="#ECF0F1")
         label_senha.grid(row=2, column=0, pady=(0, 10), sticky="w")
 
-        self.entry_senha = tk.Entry(right_frame, show="*", font=("Helvetica", 12))
-        self.entry_senha.grid(row=3, column=0, pady=(0, 10), padx=10, ipady=8)
+        entry_senha = tk.Entry(right_frame, show="*", font=("Helvetica", 12))
+        entry_senha.grid(row=3, column=0, pady=(0, 10), padx=10, ipady=8)
 
-        btn_entrar = tk.Button(right_frame, text="Entrar", command=self.validar_acesso, bg="#3498DB", fg="white", font=("Helvetica", 12))
+        btn_entrar = tk.Button(right_frame, text="Entrar", command=lambda: self.validar_acesso(entry_login.get(), entry_senha.get()),
+                               bg="#3498DB", fg="white", font=("Helvetica", 12))
         btn_entrar.grid(row=4, column=0, pady=(10, 0), ipady=8)
 
-    def validar_acesso(self):
+    def validar_acesso(self, login, senha):
         usuario = Usuario()
-        usuario.set_login(self.entry_login.get())
-        usuario.set_senha(self.entry_senha.get())
+        usuario.set_login(login)
+        usuario.set_senha(senha)
 
         if usuario.validar_acesso():
             messagebox.showinfo("Acesso Permitido", f"Bem-vindo(a) {usuario.get_nome()}!")
-            self.root.destroy()
-            TelaMenu(usuario)  # Chama a próxima tela passando o usuário autenticado
+
+            if usuario.get_tipo() == 'Cliente':
+                self.root.destroy()
+                TelaMenu(usuario)
+            elif usuario.get_tipo() == 'Bibliotecario':
+                self.root.destroy()
+                TelaMenuBibliotecario(usuario)
         else:
             messagebox.showerror("Acesso Negado", "Login ou senha inválidos")

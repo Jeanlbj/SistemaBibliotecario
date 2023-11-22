@@ -19,43 +19,43 @@ class TelaMenu:
 
     def setup_layout(self):
         # Frame esquerdo com cor sólida
-        left_frame = tk.Frame(self.root, width=300, height=400, bg="#2C3E50")  # Ajustei a largura
-        left_frame.pack(side=tk.LEFT, fill=tk.Y)
+        self.left_frame = tk.Frame(self.root, width=300, height=400, bg="#2C3E50")  # Ajustei a largura
+        self.left_frame.pack(side=tk.LEFT, fill=tk.Y)
 
-        tk.Frame(left_frame, height=20, bg="#2C3E50").pack(side=tk.TOP)
+        tk.Frame(self.left_frame, height=20, bg="#2C3E50").pack(side=tk.TOP)
 
-        central_space = tk.Frame(left_frame, height=200, bg="#2C3E50")
-        central_space.pack(side=tk.TOP)
+        self.central_space = tk.Frame(self.left_frame, height=200, bg="#2C3E50")
+        self.central_space.pack(side=tk.TOP)
 
         # Frame direito (resultados)
-        right_frame = tk.Frame(self.root, padx=20, pady=20, bg="#ECF0F1")
-        right_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.right_frame = tk.Frame(self.root, padx=20, pady=20, bg="#ECF0F1")
+        self.right_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-        label_bem_vindo = tk.Label(right_frame, text=f"Bem-vindo, {self.usuario.get_nome()}!",
+        label_bem_vindo = tk.Label(self.right_frame, text=f"Bem-vindo, {self.usuario.get_nome()}!",
                                    font=('Helvetica', 12, 'bold'), bg="#ECF0F1")
         label_bem_vindo.grid(row=0, column=0, pady=(0, 10), sticky="w")
 
         # Widget de texto maior para exibir informações
-        self.texto_resultado = tk.Text(right_frame, width=80, height=20, bg="#ECF0F1")  # Ajustei a altura
+        self.texto_resultado = tk.Text(self.right_frame, width=80, height=20, bg="#ECF0F1")  # Ajustei a altura
         self.texto_resultado.grid(row=1, column=0, pady=(0, 10))
 
-        btn_listar_livros = tk.Button(central_space, text="Listar Livros", command=self.listar_livros,
+        btn_listar_livros = tk.Button(self.central_space, text="Listar Livros", command=self.listar_livros,
                                       bg="#3498DB", fg="white", width=15)  # Ajustei a largura
         btn_listar_livros.pack(side=tk.TOP, pady=(20, 10))
 
-        btn_fazer_emprestimo = tk.Button(central_space, text="Fazer Empréstimo", command=self.fazer_emprestimo,
+        btn_fazer_emprestimo = tk.Button(self.central_space, text="Fazer Empréstimo", command=self.fazer_emprestimo,
                                          bg="#3498DB", fg="white", width=15)
         btn_fazer_emprestimo.pack(side=tk.TOP, pady=(0, 10))
 
-        btn_listar_emprestimos = tk.Button(central_space, text="Listar Empréstimos",
+        btn_listar_emprestimos = tk.Button(self.central_space, text="Listar Empréstimos",
                                            command=self.listar_emprestimos, bg="#3498DB", fg="white", width=15)
         btn_listar_emprestimos.pack(side=tk.TOP, pady=(0, 10))
 
-        btn_sobre = tk.Button(central_space, text="Sobre", command=self.mostrar_sobre, bg="#3498DB", fg="white",
+        btn_sobre = tk.Button(self.central_space, text="Sobre", command=self.mostrar_sobre, bg="#3498DB", fg="white",
                               width=15)
         btn_sobre.pack(side=tk.TOP, pady=(0, 10))
 
-        btn_sair = tk.Button(central_space, text="Sair", command=self.sair, bg="#E74C3C", fg="white", width=15)
+        btn_sair = tk.Button(self.central_space, text="Sair", command=self.sair, bg="#E74C3C", fg="white", width=15)
         btn_sair.pack(side=tk.TOP, pady=(0, 10))
 
     def listar_livros(self):
@@ -120,11 +120,12 @@ class TelaMenu:
             if livro.codigo == codigo_livro:
                 return True
         return False
+
     @staticmethod
     def livro_ja_emprestado(codigo_livro):
         emprestimos = Emprestimo.ler_emprestimos_do_arquivo()
         for emprestimo in emprestimos:
-            if emprestimo.codigo == codigo_livro:
+            if emprestimo.livro == codigo_livro:
                 return True
         return False
 

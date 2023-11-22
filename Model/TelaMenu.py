@@ -1,6 +1,9 @@
 import tkinter as tk
 from Model.Livro import Livro
 from Model.Emprestimo import Emprestimo
+from datetime import datetime
+from tkinter import simpledialog
+from tkinter import messagebox
 
 
 class TelaMenu:
@@ -40,6 +43,10 @@ class TelaMenu:
                                       bg="#3498DB", fg="white", width=15)  # Ajustei a largura
         btn_listar_livros.pack(side=tk.TOP, pady=(20, 10))
 
+        btn_fazer_emprestimo = tk.Button(central_space, text="Fazer Empréstimo", command=self.fazer_emprestimo,
+                                         bg="#3498DB", fg="white", width=15)
+        btn_fazer_emprestimo.pack(side=tk.TOP, pady=(0, 10))
+
         btn_listar_emprestimos = tk.Button(central_space, text="Listar Empréstimos",
                                            command=self.listar_emprestimos, bg="#3498DB", fg="white", width=15)
         btn_listar_emprestimos.pack(side=tk.TOP, pady=(0, 10))
@@ -67,6 +74,59 @@ class TelaMenu:
                 f"Livro: {emprestimo.livro}, Data: {emprestimo.data}\n"
             )
             self.texto_resultado.insert(tk.END, info_emprestimo)
+
+    @staticmethod
+    def gerar_codigo_emprestimo():
+        # Gera um código de empréstimo único
+        emprestimos = Emprestimo.ler_emprestimos_do_arquivo()
+        codigo_emprestimo = str(int(datetime.timestamp(datetime.now())))
+
+        # Garante que o código gerado não existe nos empréstimos existentes
+        while any(emprestimo.codigo == codigo_emprestimo for emprestimo in emprestimos):
+            codigo_emprestimo = str(int(datetime.timestamp(datetime.now())))
+
+        return codigo_emprestimo
+
+    def fazer_emprestimo(self):
+        # Pergunta ao usuário o código do livro desejado
+        codigo_livro = tk.simpledialog.askstring("Fazer Empréstimo", "Digite o código do livro:")
+
+        # Verifica se o livro existe no catálogo
+        if not self.livro_existe_no_catalogo(codigo_livro):
+            tk.messagebox.showinfo("Aviso", "Este livro não está disponível no catálogo.")
+            return
+
+        # Verifica se o livro já está emprestado
+        if self.livro_ja_emprestado(codigo_livro):
+            tk.messagebox.showinfo("Aviso", "Este livro já está emprestado.")
+        else:
+            # Cria um novo empréstimo
+            emprestimo = Emprestimo(
+                codigo=self.gerar_codigo_emprestimo(),
+                cliente=self.usuario.get_codigo(),
+                livro=codigo_livro,
+                data=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            )
+
+            # Adiciona o empréstimo ao arquivo
+            Emprestimo.adicionar_emprestimo(emprestimo)
+
+            tk.messagebox.showinfo("Sucesso", "Empréstimo realizado com sucesso.")
+
+    @staticmethod
+    def livro_existe_no_catalogo(codigo_livro):
+        livros = Livro.ler_livros_do_arquivo()
+        for livro in livros:
+            if livro.codigo == codigo_livro:
+                return True
+        return False
+    @staticmethod
+    def livro_ja_emprestado(codigo_livro):
+        emprestimos = Emprestimo.ler_emprestimos_do_arquivo()
+        for emprestimo in emprestimos:
+            if emprestimo.codigo == codigo_livro:
+                return True
+        return False
 
     def mostrar_sobre(self):
         self.texto_resultado.delete(1.0, tk.END)

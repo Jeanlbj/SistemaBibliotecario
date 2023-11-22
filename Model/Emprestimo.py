@@ -26,3 +26,9 @@ class Emprestimo:
                 print(
                     f"Código: {emprestimo.codigo}, Cliente: {emprestimo.cliente}, "
                     f"Livro: {emprestimo.livro}, Data: {emprestimo.data}")
+
+    @classmethod
+    def adicionar_emprestimo(cls, emprestimo):
+        with open('txt/emprestimos.txt', 'a') as arquivo_emprestimos:
+            linha = f"{emprestimo.codigo},{emprestimo.cliente},{emprestimo.livro},{emprestimo.data}\n"
+            arquivo_emprestimos.write(linha)

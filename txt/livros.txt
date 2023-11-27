@@ -3,3 +3,4 @@
 3,Dom Quixote,Miguel de Cervantes
 4,Harry Potter e a Pedra Filosofal,J.K. Rowling
 5,Cem Anos de Solidao,Gabriel Garcia Marquez
+6,Fadas,João Victor

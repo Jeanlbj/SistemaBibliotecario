@@ -1,3 +1,7 @@
 1,Joao,Cliente,joao123,senha123
 2,Maria,Bibliotecario,maria456,senha456
 3,Lucas,Cliente,lucas123,123
+4,Jean,Cliente,jean123,senha123
+5,Murilo,Bibliotecario,murilo123,senha123
+6,Vitor,Cliente,vitor123,senha123
+7,Ariel,Bibliotecario,ariel123,senha123

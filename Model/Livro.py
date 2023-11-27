@@ -23,3 +23,22 @@ class Livro:
             print("### Lista de Livros ###")
             for livro in livros:
                 print(f"Código: {livro.codigo}, Título: {livro.titulo}, Autor: {livro.autor}")
+
+    @classmethod
+    def adicionar_livro(cls, livro):
+        with open('txt/livros.txt', 'a') as arquivo_livros:
+            linha = f"{livro.codigo},{livro.titulo},{livro.autor}\n"
+            arquivo_livros.write(linha)
+
+    @staticmethod
+    def obter_proximo_codigo_livro():
+        # lê o arquivo de livros e identifica o último código
+        with open('txt/livros.txt', 'r') as arquivo_livros:
+            linhas = arquivo_livros.readlines()
+            if linhas:
+                ultimo_codigo = int(linhas[-1].split(',')[0])
+                proximo_codigo = ultimo_codigo + 1
+            else:
+                proximo_codigo = 1
+
+        return proximo_codigo

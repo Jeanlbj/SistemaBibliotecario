@@ -66,7 +66,7 @@ class TelaCadastro:
         if nome and login and senha:
             usuario = Usuario()
 
-            # autocompletar o código do usuário se baseando na última linha do arquivo usuario.txt
+            # Autocompletar o código do usuário se baseando na última linha do arquivo usuario.txt
             with open('txt/usuarios.txt', 'r') as arquivo_usuarios:
                 linhas = arquivo_usuarios.readlines()
                 if linhas:
@@ -77,7 +77,7 @@ class TelaCadastro:
 
             usuario.instanciar_usr(codigo_usuario, nome, "Cliente")
 
-            # verificação login já existe no arquivo
+            # Verificação se o login já existe no arquivo
             with open('txt/usuarios.txt', 'r') as arquivo_usuarios:
                 for linha in arquivo_usuarios:
                     dados = linha.strip().split(',')
@@ -85,14 +85,23 @@ class TelaCadastro:
                         messagebox.showerror("Erro no Cadastro", "Login já existe. Escolha outro.")
                         return
 
-            # se não existir, pode criar um novo usuário
+            # Se o login não existir, pode criar um novo usuário
             usuario.getUsuarios()[login] = {'codigo': codigo_usuario, 'nome': nome, 'tipo': 'Cliente', 'senha': senha}
 
-            # salvar informações no arquivo
-            with open('txt/usuarios.txt', 'a') as arquivo_usuarios:
-                arquivo_usuarios.write(f"{codigo_usuario},{nome},Cliente,{login},{senha}\n")
+            # ler todo o conteúdo existente do arquivo
+            with open('txt/usuarios.txt', 'r') as arquivo_usuarios:
+                conteudo_existente = arquivo_usuarios.read()
+
+            # Adicionar a nova linha
+            nova_linha = f"{codigo_usuario},{nome},Cliente,{login},{senha}\n"
+            conteudo_atualizado = conteudo_existente + nova_linha
+
+            # escrever todo o conteúdo de volta no arquivo
+            with open('txt/usuarios.txt', 'w') as arquivo_usuarios:
+                arquivo_usuarios.write(conteudo_atualizado)
 
             messagebox.showinfo("Cadastro realizado", "Usuário cadastrado com sucesso.")
             self.master.destroy()  # Fechar a janela de cadastro após o cadastro ser concluído
         else:
             messagebox.showerror("Erro no Cadastro", "Preencha todos os campos.")
+

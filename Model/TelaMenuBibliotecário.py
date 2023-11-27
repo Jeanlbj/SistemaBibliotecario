@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import simpledialog, messagebox
 from Model.Emprestimo import Emprestimo
+from Model.Livro import Livro
 from Model.TelaMenu import TelaMenu
 from Model.Usuario import Usuario
 
@@ -10,6 +11,14 @@ class TelaMenuBibliotecario(TelaMenu):
         super().__init__(usuario)
         self.setup_deletar_emprestimo_button()
         self.setup_cadastrar_bibliotecario_button()
+        self.setup_cadastrar_livro_button()
+
+    def setup_cadastrar_livro_button(self):
+        estilos_btn = {'bg': "#3498DB", 'fg': "white", 'width': 15, 'font': ('Helvetica', 12)}
+
+        btn_cadastrar_livro = tk.Button(self.central_space, text="Cadastrar Livro",
+                                        command=self.cadastrar_livro, **estilos_btn)
+        btn_cadastrar_livro.pack(side=tk.TOP, pady=(0, 10))
 
     def setup_deletar_emprestimo_button(self):
         estilos_btn = {'bg': "#3498DB", 'fg': "white", 'width': 15, 'font': ('Helvetica', 12)}
@@ -99,3 +108,25 @@ class TelaMenuBibliotecario(TelaMenu):
                 proximo_codigo = 1
 
         return proximo_codigo
+
+    @staticmethod
+    def cadastrar_livro():
+        # solicitar informações para o novo livro
+        titulo_livro = simpledialog.askstring("Cadastro de Livro", "Digite o título do livro:")
+        autor_livro = simpledialog.askstring("Cadastro de Livro", "Digite o autor do livro:")
+
+        # Verificar se algum campo está vazio
+        if not titulo_livro or not autor_livro:
+            messagebox.showerror("Erro no Cadastro", "Todos os campos devem ser preenchidos.")
+            return
+
+        # obter o próximo código do livro
+        codigo_livro = Livro.obter_proximo_codigo_livro()
+
+        # criar uma instância do livro
+        novo_livro = Livro(codigo_livro, titulo_livro, autor_livro)
+
+        # adicionar o novo livro ao arquivo
+        Livro.adicionar_livro(novo_livro)
+
+        messagebox.showinfo("Cadastro realizado", "Livro cadastrado com sucesso.")

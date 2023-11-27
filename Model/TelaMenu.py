@@ -58,6 +58,10 @@ class TelaMenu:
                                            command=self.listar_emprestimos, **estilos_btn)
         btn_listar_emprestimos.pack(side=tk.TOP, pady=(0, 10))
 
+        btn_meus_emprestimos = tk.Button(self.central_space, text="Meus Empréstimos",
+                                         command=self.listar_meus_emprestimos, **estilos_btn)
+        btn_meus_emprestimos.pack(side=tk.TOP, pady=(0, 10))
+
         btn_sobre = tk.Button(self.central_space, text="Sobre", command=self.mostrar_sobre, **estilos_btn)
         btn_sobre.pack(side=tk.TOP, pady=(0, 10))
 
@@ -81,13 +85,36 @@ class TelaMenu:
             )
             self.texto_resultado.insert(tk.END, info_emprestimo)
 
+    def listar_meus_emprestimos(self):
+        codigo_usuario = self.usuario.get_codigo()
+
+        # Lê o arquivo de empréstimos
+        emprestimos = Emprestimo.ler_emprestimos_do_arquivo()
+
+        # filtra os empréstimos relacionados ao código do usuário
+        meus_emprestimos = [e for e in emprestimos if e.cliente == codigo_usuario]
+
+        # habilitar fazer edições no campo
+        self.texto_resultado.config(state=tk.NORMAL)
+
+        # limpa o campo antes de adicionar novos empréstimos
+        self.texto_resultado.delete("1.0", tk.END)
+
+        # printando empréstimos na campo de texto
+        if meus_emprestimos:
+            for emprestimo in meus_emprestimos:
+                texto_emprestimo = f"Código: {emprestimo.codigo}, Livro: {emprestimo.livro}, Data: {emprestimo.data}\n"
+                self.texto_resultado.insert(tk.END, texto_emprestimo)
+        else:
+            self.texto_resultado.insert(tk.END, "Você não possui empréstimos registrados.")
+
     @staticmethod
     def gerar_codigo_emprestimo():
-        # Gera um código de empréstimo único
+        # gera um código de empréstimo único
         emprestimos = Emprestimo.ler_emprestimos_do_arquivo()
         codigo_emprestimo = str(int(datetime.timestamp(datetime.now())))
 
-        # Garante que o código gerado não existe nos empréstimos existentes
+        # garantindo um código não repetido
         while any(emprestimo.codigo == codigo_emprestimo for emprestimo in emprestimos):
             codigo_emprestimo = str(int(datetime.timestamp(datetime.now())))
 
@@ -149,8 +176,3 @@ class TelaMenu:
 
     def sair(self):
         self.root.destroy()
-
-# Exemplo de uso:
-# usuario_exemplo = SeuObjetoUsuarioAqui()  # Substitua por um objeto real do usuário
-# tela_menu = TelaMenu(usuario_exemplo)
-# tela_menu.root.mainloop()

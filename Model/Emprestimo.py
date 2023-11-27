@@ -1,3 +1,6 @@
+from tkinter import messagebox
+
+
 class Emprestimo:
     def __init__(self, codigo, cliente, livro, data):
         self.codigo = codigo
@@ -27,6 +30,33 @@ class Emprestimo:
                 print(
                     f"Código: {emprestimo.codigo}, Cliente: {emprestimo.cliente}, "
                     f"Livro: {emprestimo.livro}, Data: {emprestimo.data}")
+
+    def listar_meus_emprestimos(self):
+        codigo_usuario = self.usuario.get_codigo()
+
+        # Lê o arquivo de empréstimos
+        emprestimos = Emprestimo.ler_emprestimos_do_arquivo()
+
+        # Filtra os empréstimos relacionados ao código do usuário
+        meus_emprestimos = [e for e in emprestimos if e.cliente == codigo_usuario]
+
+        # Exibe os empréstimos
+        if meus_emprestimos:
+            messagebox.showinfo("Meus Empréstimos", self.formatar_emprestimos(meus_emprestimos))
+        else:
+            messagebox.showinfo("Meus Empréstimos", "Você não possui empréstimos registrados.")
+
+    def formatar_emprestimos(self, emprestimos):
+        # Formata os empréstimos para exibição
+        resultado = "Meus Empréstimos:\n"
+        for emprestimo in emprestimos:
+            resultado += f"  Código: {emprestimo.codigo}\n"
+            resultado += f"  Livro: {emprestimo.livro}\n"
+            resultado += f"  Data de Empréstimo: {emprestimo.data_emprestimo}\n"
+            resultado += f"  Data de Devolução: {emprestimo.data_devolucao}\n"
+            resultado += "\n"
+
+        return resultado
 
     @classmethod
     def adicionar_emprestimo(cls, emprestimo):

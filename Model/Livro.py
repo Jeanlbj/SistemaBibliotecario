@@ -10,13 +10,13 @@ class Livro:
         with open('txt/livros.txt', 'r') as arquivo_livros:
             for linha in arquivo_livros:
                 codigo, titulo, autor = linha.strip().split(',')
-                livro = cls(codigo, titulo, autor)  # Cria uma instância da classe Livro
+                livro = cls(codigo, titulo, autor)  # criando uma instância da classe livro
                 livros.append(livro)
         return livros
 
     @classmethod
     def listar_livros(cls):
-        livros = cls.ler_livros_do_arquivo()  # Chama o método para ler os livros
+        livros = cls.ler_livros_do_arquivo()  # chama o método para ler livros
         if len(livros) == 0:
             print("Não há livros disponíveis.")
         else:

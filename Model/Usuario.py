@@ -22,6 +22,9 @@ class Usuario:
     def get_senha(self):
         return self.__senha
 
+    def set_nome(self, nome):
+        self.__nome = nome
+
     def set_login(self, login):
         self.__login = login
 
@@ -37,7 +40,7 @@ class Usuario:
         self.__tipo = tipo
 
     def validar_acesso(self):
-        # Lê o arquivo de usuários e armazena as informações em um dicionário
+        # lê o arquivo de usuários e guarda em um dicionário
         with open('txt/usuarios.txt', 'r') as arquivo_usuarios:
             for linha in arquivo_usuarios:
                 codigo, nome, tipo, login, senha = linha.strip().split(',')
@@ -49,4 +52,3 @@ class Usuario:
                     self.instanciar_usr(codigo, nome, tipo)
                     return True
         return False
-

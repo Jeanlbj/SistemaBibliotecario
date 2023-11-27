@@ -1,5 +1,4 @@
 import tkinter as tk
-
 from Model.TelaLogin import TelaLogin
 
 if __name__ == "__main__":

@@ -1,25 +1,29 @@
 import tkinter as tk
+from tkinter import messagebox, simpledialog
 from Model.Livro import Livro
 from Model.Emprestimo import Emprestimo
 from datetime import datetime
-from tkinter import simpledialog
-from tkinter import messagebox
 
 
 class TelaMenu:
     def __init__(self, usuario):
+        self.right_frame = None
+        self.central_space = None
+        self.left_frame = None
+
         self.texto_resultado = None
         self.usuario = usuario
 
         self.root = tk.Tk()
         self.root.title("Sistema Bibliotecário - Menu")
-        self.root.geometry("800x400")  # Ajustei a largura da janela
+        self.root.geometry("800x400")
+        self.root.configure(bg="#2C3E50")  # Cor de fundo para o tema escuro
 
         self.setup_layout()
 
     def setup_layout(self):
         # Frame esquerdo com cor sólida
-        self.left_frame = tk.Frame(self.root, width=300, height=400, bg="#2C3E50")  # Ajustei a largura
+        self.left_frame = tk.Frame(self.root, width=300, height=400, bg="#2C3E50")
         self.left_frame.pack(side=tk.LEFT, fill=tk.Y)
 
         tk.Frame(self.left_frame, height=20, bg="#2C3E50").pack(side=tk.TOP)
@@ -36,23 +40,25 @@ class TelaMenu:
         label_bem_vindo.grid(row=0, column=0, pady=(0, 10), sticky="w")
 
         # Widget de texto maior para exibir informações
-        self.texto_resultado = tk.Text(self.right_frame, width=80, height=20, bg="#ECF0F1")  # Ajustei a altura
+        self.texto_resultado = tk.Text(self.right_frame, width=80, height=20, bg="#ECF0F1", font=('Helvetica', 12))
         self.texto_resultado.grid(row=1, column=0, pady=(0, 10))
 
+        # Botões com estilo
+        estilos_btn = {'bg': "#3498DB", 'fg': "white", 'width': 15, 'font': ('Helvetica', 12)}
+
         btn_listar_livros = tk.Button(self.central_space, text="Listar Livros", command=self.listar_livros,
-                                      bg="#3498DB", fg="white", width=15)  # Ajustei a largura
+                                      **estilos_btn)
         btn_listar_livros.pack(side=tk.TOP, pady=(20, 10))
 
         btn_fazer_emprestimo = tk.Button(self.central_space, text="Fazer Empréstimo", command=self.fazer_emprestimo,
-                                         bg="#3498DB", fg="white", width=15)
+                                         **estilos_btn)
         btn_fazer_emprestimo.pack(side=tk.TOP, pady=(0, 10))
 
         btn_listar_emprestimos = tk.Button(self.central_space, text="Listar Empréstimos",
-                                           command=self.listar_emprestimos, bg="#3498DB", fg="white", width=15)
+                                           command=self.listar_emprestimos, **estilos_btn)
         btn_listar_emprestimos.pack(side=tk.TOP, pady=(0, 10))
 
-        btn_sobre = tk.Button(self.central_space, text="Sobre", command=self.mostrar_sobre, bg="#3498DB", fg="white",
-                              width=15)
+        btn_sobre = tk.Button(self.central_space, text="Sobre", command=self.mostrar_sobre, **estilos_btn)
         btn_sobre.pack(side=tk.TOP, pady=(0, 10))
 
         btn_sair = tk.Button(self.central_space, text="Sair", command=self.sair, bg="#E74C3C", fg="white", width=15)
@@ -89,16 +95,16 @@ class TelaMenu:
 
     def fazer_emprestimo(self):
         # Pergunta ao usuário o código do livro desejado
-        codigo_livro = tk.simpledialog.askstring("Fazer Empréstimo", "Digite o código do livro:")
+        codigo_livro = simpledialog.askstring("Fazer Empréstimo", "Digite o código do livro:")
 
         # Verifica se o livro existe no catálogo
         if not self.livro_existe_no_catalogo(codigo_livro):
-            tk.messagebox.showinfo("Aviso", "Este livro não está disponível no catálogo.")
+            messagebox.showinfo("Aviso", "Este livro não está disponível no catálogo.")
             return
 
         # Verifica se o livro já está emprestado
         if self.livro_ja_emprestado(codigo_livro):
-            tk.messagebox.showinfo("Aviso", "Este livro já está emprestado.")
+            messagebox.showinfo("Aviso", "Este livro já está emprestado.")
         else:
             # Cria um novo empréstimo
             emprestimo = Emprestimo(
@@ -111,7 +117,7 @@ class TelaMenu:
             # Adiciona o empréstimo ao arquivo
             Emprestimo.adicionar_emprestimo(emprestimo)
 
-            tk.messagebox.showinfo("Sucesso", "Empréstimo realizado com sucesso.")
+            messagebox.showinfo("Sucesso", "Empréstimo realizado com sucesso.")
 
     @staticmethod
     def livro_existe_no_catalogo(codigo_livro):
@@ -135,7 +141,7 @@ class TelaMenu:
                       "Engenharia de Software e Sistemas de Informação do UniAcademia,\n"
                       "a Librateca é uma inovadora empresa de desenvolvimento de software.\n"
                       "Nossa missão é otimizar o gerenciamento de bibliotecas,\n"
-                      "proporcionando uma experiência intuitiva e eficaz.E como visão, \n"
+                      "proporcionando uma experiência intuitiva e eficaz. E como visão, \n"
                       "buscamos ser líderes na transformação digital das bibliotecas, \n"
                       "oferecendo soluções inovadoras que atendam às necessidades \n"
                       "dinâmicas do mundo contemporâneo")
@@ -143,3 +149,8 @@ class TelaMenu:
 
     def sair(self):
         self.root.destroy()
+
+# Exemplo de uso:
+# usuario_exemplo = SeuObjetoUsuarioAqui()  # Substitua por um objeto real do usuário
+# tela_menu = TelaMenu(usuario_exemplo)
+# tela_menu.root.mainloop()

@@ -1,4 +1,2 @@
 1,Joao,Cliente,joao123,senha123
 2,Maria,Bibliotecario,maria456,senha456
-3,Carlos,Cliente,carlos789,senha789
-4,Ana,Cliente,ana101,senha101

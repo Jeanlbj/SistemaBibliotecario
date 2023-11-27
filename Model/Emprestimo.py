@@ -10,15 +10,15 @@ class Emprestimo:
         emprestimos = []
         with open('txt/emprestimos.txt', 'r') as arquivo_emprestimos:
             for linha in arquivo_emprestimos:
-                # Aqui, a linha está sendo dividida em mais valores do que o esperado
+                # .strip e .split para formatação ideal da linha do .txt
                 codigo, cliente, livro, data = linha.strip().split(',')
-                emprestimo = cls(codigo, cliente, livro, data)  # Cria uma instância da classe Emprestimo
+                emprestimo = cls(codigo, cliente, livro, data)  # criando uma instancia da classe empréstimo
                 emprestimos.append(emprestimo)
         return emprestimos
 
     @classmethod
     def listar_emprestimos(cls):
-        emprestimos = cls.ler_emprestimos_do_arquivo()  # Chama o método para ler os empréstimos
+        emprestimos = cls.ler_emprestimos_do_arquivo()  # chama o método de ler empréstimos
         if len(emprestimos) == 0:
             print("Não há empréstimos registrados.")
         else:
